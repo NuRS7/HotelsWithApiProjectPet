@@ -10,15 +10,15 @@ from alembic import context
 
 sys.path.insert(0,dirname(dirname(dirname(abspath(__file__)))))
 
-
-from database import Base, DATABASE_URL
+from config import settings
+from database import Base
 from hotels.models import Hotels
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 #alembic синхронно жұмыс істегеннен кейін f"{DATABASE_URL}?async_fallback=True" жазу арқылы асинхронность қосамыз.
 # чтобы одно дело синхронно одно дело асинхронно болмау үшін
-config.set_main_option('sqlalchemy.url', f"{DATABASE_URL}?async_fallback=True")
+config.set_main_option('sqlalchemy.url', f"{settings.DATABASE_URL}?async_fallback=True")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
