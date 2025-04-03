@@ -1,10 +1,15 @@
 from dataclasses import Field
 
+import fastapi
 from fastapi import FastAPI, Query, Depends
 from typing import Optional
 from pydantic import BaseModel
 from datetime import date
+
+
+from bookings.router import router as booking_router
 app = FastAPI()
+app.include_router(booking_router)
 
 class HotelsSearchArgs:
     def __init__(
