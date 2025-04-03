@@ -12,7 +12,10 @@ sys.path.insert(0,dirname(dirname(dirname(abspath(__file__)))))
 
 from config import settings
 from database import Base
-from hotels.models import Hotels
+
+from hotels.models import Hotels, Room
+from users.models import Users
+from bookings.models import Bookings
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
