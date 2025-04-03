@@ -15,7 +15,7 @@ class Hotels(Base):
 
 
 
-
+#model Room
 class Rooms(Base):
     __tablename__ = 'rooms'
 
