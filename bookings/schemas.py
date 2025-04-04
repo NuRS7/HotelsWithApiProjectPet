@@ -12,4 +12,10 @@ class SBooking(BaseModel):
     total_days:int
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+
+
+class SNewBooking(BaseModel):
+    room_id: int
+    date_from: date
+    date_to: date
