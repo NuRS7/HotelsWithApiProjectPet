@@ -1,7 +1,8 @@
 
-from fastapi import APIRouter, HTTPException, Response
-from starlette import status
+from fastapi import APIRouter, HTTPException, Response, status, Depends
 
+from users.dependencies import get_current_user, get_current_admin_user
+from users.models import Users
 from users.schemas import SchemasAuth
 from users.repository import UserRepository
 from users.auth import get_password_hash, verify_password, authenticate_user, create_access_token
@@ -33,6 +34,22 @@ async def login(response: Response,user_data: SchemasAuth):
     user = await authenticate_user(user_data.email, user_data.password)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
-    access_token = create_access_token({"sub":user.id})
+    access_token = create_access_token({"sub":str(user.id)})
     response.set_cookie("booking_access_token", access_token, httponly=True)
-    return access_token
+    return {"access_token": access_token}
+
+
+
+@router.post("/logout")
+async def logout_user(response: Response):
+    response.delete_cookie("booking_access_token")
+
+
+@router.get("/me")
+async def read_users_me(current_user: Users = Depends(get_current_user)):
+    return current_user
+
+
+@router.get("/all")
+async def read_users_me(current_user:Users = Depends(get_current_admin_user)):
+    return await UserRepository.find_all()
