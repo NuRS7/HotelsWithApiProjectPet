@@ -1,6 +1,8 @@
 from bookings.repository import BookingRepository
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Depends
 from bookings.schemas import SBooking
+from users.dependencies import get_current_user
+from users.models import Users
 
 router = APIRouter(
     prefix="/bookings",
@@ -8,8 +10,19 @@ router = APIRouter(
 )
 
 @router.get("")
-async def get_bookings() -> list[SBooking]:
-    return await BookingRepository.find_by_id(1)
+async def get_bookings(user:Users = Depends(get_current_user)) :#-> list[SBooking]:
+    return await BookingRepository.find_all(user_id=user.id)
+#     print(request.cookies)
+#     print(request.headers)
+#     print(request.url)
+#     print(request.client)
+# {'csrftoken': 'hiGEuYKezMc4pRWJh6p6mtrK6BvgvZEF', 'sessionid': '1os1lwv21eq812d9u6atk0wvm1i9zr5w'}
+# Headers({'host': '127.0.0.1:8000', 'connection': 'keep-alive', 'sec-ch-ua-platform': '"Windows"', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
+# WebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'accept': 'application/json', 'sec-ch-ua': '"Chromium";v="134", "Not:A-Brand";v="24", "Google
+#  Chrome";v="134"', 'sec-ch-ua-mobile': '?0', 'sec-fetch-site': 'same-origin', 'sec-fetch-mode': 'cors', 'sec-fetch-dest': 'empty', 'referer': 'http://127.0.0.1:
+# 8000/docs', 'accept-encoding': 'gzip, deflate, br, zstd', 'accept-language': 'en-US,en;q=0.9,ru;q=0.8', 'cookie': 'csrftoken=hiGEuYKezMc4pRWJh6p6mtrK6BvgvZEF; sessionid=1os1lwv21eq812d9u6atk0wvm1i9zr5w'})
+# http://127.0.0.1:8000/bookings
+
 
 
 
