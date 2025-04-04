@@ -1,6 +1,6 @@
 from bookings.repository import BookingRepository
 from fastapi import APIRouter
-
+from bookings.schemas import SBooking
 
 router = APIRouter(
     prefix="/bookings",
@@ -8,8 +8,8 @@ router = APIRouter(
 )
 
 @router.get("")
-async def get_bookings():
-    return await BookingRepository.find_all()
+async def get_bookings() -> list[SBooking]:
+    return await BookingRepository.find_by_id(1)
 
 
 
