@@ -1,17 +1,22 @@
 from bookings.repository import BookingRepository
 from fastapi import APIRouter, Request, Depends
-from bookings.schemas import SBooking
+from bookings.schemas import SBooking, SNewBooking
 from users.dependencies import get_current_user
 from users.models import Users
+from exceptions import RoomCannotBeBooked
+from fastapi_versioning import version
 
 router = APIRouter(
     prefix="/bookings",
     tags=["Бронирования"],
 )
 
+
 @router.get("")
-async def get_bookings(user:Users = Depends(get_current_user)) :#-> list[SBooking]:
+async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking]:
     return await BookingRepository.find_all(user_id=user.id)
+
+
 #     print(request.cookies)
 #     print(request.headers)
 #     print(request.url)
@@ -24,6 +29,20 @@ async def get_bookings(user:Users = Depends(get_current_user)) :#-> list[SBookin
 # http://127.0.0.1:8000/bookings
 
 
+@router.post("")
+async def add_booking(booking: SNewBooking, user: Users = Depends(get_current_user)):
+    await BookingRepository.add(
+        user.id, booking.room_id, booking.date_from, booking.date_to
+    )
+    if not booking:
+        raise RoomCannotBeBooked
+
+    return booking
 
 
-
+@router.delete("/{booking_id}")
+async def remove_booking(
+    booking_id: int,
+    current_user: Users = Depends(get_current_user),
+):
+    await BookingRepository.delete(id=booking_id, user_id=current_user.id)
