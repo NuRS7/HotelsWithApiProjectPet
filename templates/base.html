@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="{{ url_for('static', path='images/logo.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/navbar.css') }}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    async function logoutUser() {
+      const url = "http://localhost:8000/api/v1/auth/logout";
+      await fetch(url, {
+        method: 'POST',
+      }).then(response => {
+        if (response.status === 200) {
+          window.location.href = "/pages/login"
+        }
+      });
+    }
+  </script>
+  <title>Набронировал</title>
+  {% block head %}{% endblock %}
+</head>
+<body class="bg-gradient-to-br from-white to-blue-50 min-h-screen text-gray-800 font-sans">
+
+<!-- Навбар -->
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-md animate-fade-in-down transition duration-300 ease-in-out">
+  <div class="flex justify-between items-center px-10 py-4 text-xl font-semibold">
+    <ul>
+      <li>
+        <a href="/pages/hotels/Алтай?date_to=2024-05-01&date_from=2024-04-17"
+           class="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out hover:underline">
+          Набронировал
+        </a>
+      </li>
+    </ul>
+    <ul class="flex gap-x-6 items-center">
+      <li>
+        <a href="/pages/bookings"
+           class="text-gray-700 hover:text-blue-700 transition-all duration-300 ease-in-out hover:underline">
+          Мои брони
+        </a>
+      </li>
+      <li>
+        <button onclick="logoutUser()"
+                class="bg-red-500 text-white px-4 py-1.5 rounded-xl hover:bg-red-600 active:scale-95 transition-transform shadow-md hover:shadow-lg">
+          Выйти
+        </button>
+      </li>
+    </ul>
+  </div>
+  <hr class="border-gray-300"/>
+</nav>
+
+<!-- Контент -->
+<main class="p-4 animate-fade-in-up">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- Анимации Tailwind (если не подключены кастомные) -->
+<style>
+  @keyframes fade-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-down {
+    animation: fade-in-down 0.5s ease-out;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out;
+  }
+</style>
+
+</body>
+</html>
