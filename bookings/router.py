@@ -30,6 +30,7 @@ async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking
 
 
 @router.post("")
+@version(2)
 async def add_booking(booking: SNewBooking, user: Users = Depends(get_current_user)):
     await BookingRepository.add(
         user.id, booking.room_id, booking.date_from, booking.date_to

@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, Response, HTTPException
+from starlette import status
+
 from users.auth import authenticate_user, create_access_token, get_password_hash
 from users.repository import UserRepository
 from users.dependencies import get_current_user
@@ -25,8 +27,7 @@ async def register_user(user_data: SUserAuth):
     new_user = await UserRepository.add(
         email=user_data.email, hashed_password=hashed_password
     )
-    if not new_user:
-        raise HTTPException(status_code=402, detail="Incorrect email or password")
+    return Response(status_code=status.HTTP_201_CREATED)
 
 
 @router_auth.post("/login")
