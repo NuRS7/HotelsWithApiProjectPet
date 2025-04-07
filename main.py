@@ -32,20 +32,19 @@ app = FastAPI(
 
 
 if settings.MODE != "TEST":
-    # Подключение Sentry для мониторинга ошибок. Лучше выключать на период локального тестирования
+
     sentry_sdk.init(
         dsn=settings.SENTRY_DSN,
         traces_sample_rate=1.0,
     )
 
 
-# Включение основных роутеров
 app.include_router(router_auth)
 app.include_router(router_users)
 app.include_router(router_hotels)
 app.include_router(router_bookings)
 
-# Включение дополнительных роутеров
+
 app.include_router(router_images)
 app.include_router(router_prometheus)
 app.include_router(router_import)
